@@ -1,6 +1,5 @@
-package com.crediya.apply.model;
+package com.crediya.apply.model.apply;
 
-import com.crediya.apply.model.apply.Apply;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
