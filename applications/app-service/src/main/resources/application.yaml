@@ -24,7 +24,8 @@ cors:
   allowed-origins: "http://localhost:4200,http://localhost:8081"
 routes:
   paths:
-    applys: "/api/v1/applys"
+    saveApply: "/api/v1/apply"
+    ListApplys: "/api/v1/apply"
 adapters:
   r2dbc:
     host: "localhost"
@@ -37,3 +38,8 @@ logging:
   level:
     root: INFO
     com.crediya: DEBUG
+    org.springframework.r2dbc.core: DEBUG
+    io.r2dbc.postgresql.QUERY: DEBUG
+jwt:
+  secret: "miClaveSuperSecretaDeMasDe32CaracteresSeguro123!"
+  expiration: 3600000
