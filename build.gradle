@@ -33,5 +33,21 @@ sonar {
         property "sonar.externalIssuesReportPaths", "build/issues.json"
     }
 }
+jacoco {
+    toolVersion = "0.8.11"
+}
+
+test {
+    useJUnitPlatform()
+    finalizedBy jacocoTestReport
+}
+
+jacocoTestReport {
+    dependsOn test
+    reports {
+        xml.required = true
+        html.required = true
+    }
+}
 
 apply from: './main.gradle'
