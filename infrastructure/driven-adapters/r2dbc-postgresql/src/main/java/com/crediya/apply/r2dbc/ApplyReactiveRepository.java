@@ -8,16 +8,19 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
+import java.util.UUID;
 
 
 public interface ApplyReactiveRepository extends ReactiveCrudRepository<ApplyEntity, String>, ReactiveQueryByExampleExecutor<ApplyEntity> {
 
     // 🔎 Buscar por estados con paginación
-    @Query("SELECT * FROM applys WHERE state IN (:statuses) ORDER BY created_at DESC LIMIT :limit OFFSET :offset")
+    @Query("SELECT * FROM applies WHERE state IN (:statuses) ORDER BY created_at DESC LIMIT :limit OFFSET :offset")
     Flux<ApplyEntity> findByStateInPaged(List<String> statuses, int limit, int offset);
 
     // 🔎 Contar los registros por estado
-    @Query("SELECT COUNT(*) FROM applys WHERE state IN (:statuses)")
+    @Query("SELECT COUNT(*) FROM applies WHERE state IN (:statuses)")
     Mono<Long> count(List<String> statuses);
 
+    @Query("SELECT * FROM applies WHERE id = :id LIMIT 1")
+    Mono<ApplyEntity> findByIdSafe(UUID id);
 }

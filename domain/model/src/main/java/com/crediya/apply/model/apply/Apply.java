@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -12,11 +14,13 @@ import lombok.Setter;
 @Builder(toBuilder = true)
 public class Apply {
 
+    private UUID id;
     private String dni;
     private double amount;
     private int term;
     private String loanType;
     private String state;
+    private LocalDateTime createdAt;
 
     @Override
     public String toString() {
@@ -26,6 +30,7 @@ public class Apply {
                 ", term='" + term + '\'' +
                 ", state='" + state + '\'' +
                 ", loanType='" + loanType + '\'' +
+                ", createdAt='" + createdAt + '\'' +
                 '}';
     }
 

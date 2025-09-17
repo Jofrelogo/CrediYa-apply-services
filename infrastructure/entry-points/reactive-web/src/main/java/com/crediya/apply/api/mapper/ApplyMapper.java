@@ -8,11 +8,13 @@ public class ApplyMapper {
 
     public static Apply requestToDomain(ApplyRequestDTO dto) {
         return new Apply(
+                null,
                 dto.getDni(),
                 dto.getAmount(),
                 dto.getTerm(),
                 dto.getLoanType(),
-                dto.getState()
+                dto.getState(),
+                null
         );
     }
 

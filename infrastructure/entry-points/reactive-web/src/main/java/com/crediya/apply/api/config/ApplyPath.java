@@ -9,5 +9,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "routes.paths")
 public class ApplyPath {
     private String saveApply;
-    private String listApplys;
+    private String listApplies;
+    private String decideApply;
 }

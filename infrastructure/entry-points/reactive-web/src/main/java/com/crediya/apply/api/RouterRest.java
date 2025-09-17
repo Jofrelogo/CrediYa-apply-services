@@ -1,6 +1,8 @@
 package com.crediya.apply.api;
 
 import com.crediya.apply.api.config.ApplyPath;
+import com.crediya.apply.api.dto.ApplyDecisionRequestDTO;
+import com.crediya.apply.api.dto.ApplyDecisionResponseDTO;
 import com.crediya.apply.api.dto.ApplyRequestDTO;
 import com.crediya.apply.api.dto.ApplyResponseDTO;
 import com.crediya.apply.model.common.PageResponse;
@@ -11,6 +13,7 @@ import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +21,7 @@ import org.springdoc.core.annotations.RouterOperation;
 import org.springdoc.core.annotations.RouterOperations;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.MediaType;
 import org.springframework.web.reactive.function.server.RouterFunction;
 import org.springframework.web.reactive.function.server.RouterFunctions;
 import org.springframework.web.reactive.function.server.ServerResponse;
@@ -118,12 +122,55 @@ public class RouterRest {
                                     @ApiResponse(responseCode = "500", description = "Internal server error")
                             }
                     )
+            ),
+            @RouterOperation(
+                    path = "/api/v1/applies",
+                    produces = { MediaType.APPLICATION_JSON_VALUE },
+                    method = { org.springframework.web.bind.annotation.RequestMethod.PUT },
+                    beanClass = Handler.class,
+                    beanMethod = "decideApply",
+                    operation = @Operation(
+                            operationId = "decideApply",
+                            summary = "Approve or reject a credit application",
+                            description = "Allows an advisor (role: ASESOR) to approve or reject an existing credit application",
+                            requestBody = @RequestBody(
+                                    required = true,
+                                    content = @Content(
+                                            schema = @Schema(implementation = ApplyDecisionRequestDTO.class)
+                                    )
+                            ),
+                            responses = {
+                                    @ApiResponse(
+                                            responseCode = "200",
+                                            description = "Credit application successfully updated",
+                                            content = @Content(schema = @Schema(implementation = ApplyDecisionResponseDTO.class))
+                                    ),
+                                    @ApiResponse(
+                                            responseCode = "400",
+                                            description = "Invalid request or business validation error"
+                                    ),
+                                    @ApiResponse(
+                                            responseCode = "401",
+                                            description = "Unauthorized - missing or invalid JWT"
+                                    ),
+                                    @ApiResponse(
+                                            responseCode = "403",
+                                            description = "Forbidden - only advisors can use this endpoint"
+                                    ),
+                                    @ApiResponse(
+                                            responseCode = "404",
+                                            description = "Credit application not found"
+                                    )
+                            }
+                    )
             )
+
     })
     public RouterFunction<ServerResponse> routerFunction(Handler handler) {
         return RouterFunctions.route()
                 .POST(applyPath.getSaveApply(), handler::createApply)
-                .GET(applyPath.getListApplys(), handler::listForReview)
+                .GET(applyPath.getListApplies(), handler::listForReview)
+                .PUT(applyPath.getDecideApply(), handler::decideApply)
                 .build();
 
     }

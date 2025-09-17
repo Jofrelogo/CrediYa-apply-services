@@ -1,11 +1,15 @@
 package com.crediya.apply.api;
 
+import com.crediya.apply.api.dto.ApplyDecisionRequestDTO;
+import com.crediya.apply.api.dto.ApplyDecisionResponseDTO;
 import com.crediya.apply.api.dto.ApplyRequestDTO;
 import com.crediya.apply.api.dto.ApplyResponseDTO;
 import com.crediya.apply.api.mapper.ApplyMapper;
+import com.crediya.apply.model.common.ErrorResponse;
 import com.crediya.apply.model.common.PageQuery;
 import com.crediya.apply.model.jwt.JwtProvider;
 import com.crediya.apply.usecase.apply.ApplyUseCase;
+import com.crediya.apply.usecase.apply.DecideApplyUseCase;
 import com.crediya.apply.usecase.apply.ListApplyUseCase;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
@@ -32,6 +36,7 @@ public class Handler {
 
     private final ApplyUseCase applyUseCase;
     private final ListApplyUseCase listApplyUseCase;
+    private final DecideApplyUseCase decideApplyUseCase;
     private final Validator validator;
     private final JwtProvider jwtProvider;
     private static final Logger log = LoggerFactory.getLogger(Handler.class);
@@ -103,6 +108,24 @@ public class Handler {
                                     "error", "Internal Server Error",
                                     "message", "Internal error retrieving applications"
                             ));
+                });
+    }
+
+    public Mono<ServerResponse> decideApply(ServerRequest request) {
+        System.out.println("request = " + request);
+        return request.bodyToMono(ApplyDecisionRequestDTO.class)
+                .flatMap(dto -> decideApplyUseCase.execute(dto.getApplyId(), dto.getDecision()))
+                .map(apply -> ApplyDecisionResponseDTO.builder()
+                        .applyId(apply.getDni())
+                        .status(apply.getState())
+                        .build()
+                )
+                .flatMap(responseDto -> ServerResponse.ok()
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .bodyValue(responseDto))
+                .onErrorResume(error -> {
+                    log.error("Error in decideApply handler: {}", error.getMessage());
+                    return ServerResponse.badRequest().bodyValue(Map.of("error", error.getMessage()));
                 });
     }
 

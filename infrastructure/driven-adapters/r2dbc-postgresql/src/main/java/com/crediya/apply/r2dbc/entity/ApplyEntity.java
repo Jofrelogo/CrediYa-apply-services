@@ -7,10 +7,10 @@ import lombok.Setter;
 import lombok.AllArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
-
 import java.time.LocalDateTime;
+import java.util.UUID;
 
-@Table("applys")
+@Table("applies")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
 public class ApplyEntity {
 
     @Id
-    private String id;
+    private UUID id;
     private String dni;
     private double amount;
     private int term;

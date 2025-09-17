@@ -25,7 +25,8 @@ cors:
 routes:
   paths:
     saveApply: "/api/v1/apply"
-    ListApplys: "/api/v1/apply"
+    listApplies: "/api/v1/apply"
+    decideApply: "/api/v1/applies"
 adapters:
   r2dbc:
     host: "localhost"
