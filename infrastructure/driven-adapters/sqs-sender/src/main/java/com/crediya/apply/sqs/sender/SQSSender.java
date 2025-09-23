@@ -16,12 +16,12 @@ import software.amazon.awssdk.services.sqs.model.SendMessageRequest;
 public class SQSSender implements MessagePublisher {
     private final SQSSenderProperties properties;
     private final SqsAsyncClient client;
-    private final ObjectMapper mapper = new ObjectMapper();
+    private ObjectMapper mapper ;
 
     @Override
     public Mono<Void> publish(Object event) {
         return Mono.fromCallable(() -> {
-                    ObjectMapper mapper = new ObjectMapper();
+                    mapper = new ObjectMapper();
                     String json = mapper.writeValueAsString(event);
 
                     log.info("JSON enviado a SQS: {}", json);
