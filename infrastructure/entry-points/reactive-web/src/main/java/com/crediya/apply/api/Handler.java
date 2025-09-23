@@ -112,9 +112,8 @@ public class Handler {
     }
 
     public Mono<ServerResponse> decideApply(ServerRequest request) {
-        System.out.println("request = " + request);
         return request.bodyToMono(ApplyDecisionRequestDTO.class)
-                .flatMap(dto -> decideApplyUseCase.execute(dto.getApplyId(), dto.getDecision()))
+                .flatMap(dto -> decideApplyUseCase.decideApply(dto.getApplyId(), dto.getDecision()))
                 .map(apply -> ApplyDecisionResponseDTO.builder()
                         .applyId(apply.getDni())
                         .status(apply.getState())

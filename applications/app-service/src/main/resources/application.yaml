@@ -37,10 +37,16 @@ adapters:
     password: "0123456"
 logging:
   level:
-    root: INFO
-    com.crediya: DEBUG
-    org.springframework.r2dbc.core: DEBUG
-    io.r2dbc.postgresql.QUERY: DEBUG
+    root: "INFO"
+    com.crediya: "DEBUG"
+    org.springframework.r2dbc.core: "DEBUG"
+    io.r2dbc.postgresql.QUERY: "DEBUG"
 jwt:
   secret: "miClaveSuperSecretaDeMasDe32CaracteresSeguro123!"
   expiration: 3600000
+adapter:
+  sqs:
+    region: "us-east-2"
+    queueUrl: "https://sqs.us-east-2.amazonaws.com/832780900635/apply-notifications-queue"
+    endpoint: "http://localhost:4566"
+
