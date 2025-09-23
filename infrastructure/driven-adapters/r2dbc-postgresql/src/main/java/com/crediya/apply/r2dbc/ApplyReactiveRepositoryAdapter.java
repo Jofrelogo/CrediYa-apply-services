@@ -13,6 +13,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
+import java.util.UUID;
 
 @Repository
 public class ApplyReactiveRepositoryAdapter extends ReactiveAdapterOperations<
@@ -47,4 +48,11 @@ public class ApplyReactiveRepositoryAdapter extends ReactiveAdapterOperations<
     public Mono<Long> count(List<String> statuses) {
         return repository.count(statuses);
     }
+
+    @Override
+    public Mono<Apply> findById(UUID id) {
+        return repository.findByIdSafe(id)
+                .map(entity -> mapper.map(entity, Apply.class));
+    }
+
 }

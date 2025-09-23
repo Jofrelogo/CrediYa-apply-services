@@ -6,6 +6,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface ApplyRepository {
 
@@ -13,4 +14,6 @@ public interface ApplyRepository {
 
     Flux<Apply> findByStateIn(List<String> statuses, PageQuery pageQuery);
     Mono<Long> count(List<String> statuses);
+
+    Mono<Apply> findById(UUID dni);
 }
