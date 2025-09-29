@@ -6,6 +6,8 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.Data;
 
+import java.util.UUID;
+
 @Data
 @Schema(name = "ApplyRequestDTO", description = "Data transfer object for creating a new apply")
 public class ApplyRequestDTO {
@@ -24,9 +26,9 @@ public class ApplyRequestDTO {
     @Schema(description = "term of the loan requested in months", example = "12")
     private int term;
 
-    @NotBlank(message = "LoanType is required")
+    @NotNull(message = "LoanType is required")
     @Schema(description = "type of loan", example = "Free investment")
-    private String loanType;
+    private UUID loanType;
 
     @NotBlank(message = "State  is required")
     @Schema(description = "application status", example = "Earring")
@@ -56,11 +58,11 @@ public class ApplyRequestDTO {
         this.term = term;
     }
 
-    public String getLoanType() {
+    public UUID getLoanType() {
         return loanType;
     }
 
-    public void setLoanType(String loanType) {
+    public void setLoanType(UUID loanType) {
         this.loanType = loanType;
     }
 

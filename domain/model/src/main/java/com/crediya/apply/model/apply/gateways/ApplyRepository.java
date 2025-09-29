@@ -15,5 +15,5 @@ public interface ApplyRepository {
     Flux<Apply> findByStateIn(List<String> statuses, PageQuery pageQuery);
     Mono<Long> count(List<String> statuses);
 
-    Mono<Apply> findById(UUID dni);
+    Mono<Apply> findById(UUID id);
 }

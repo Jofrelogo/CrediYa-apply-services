@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.UUID;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -21,7 +23,7 @@ public class ApplyResponseDTO {
     private int term;
 
     @Schema(description = "type of loan", example = "Free investment")
-    private String loanType;
+    private UUID loanType;
 
     @Schema(description = "application status", example = "Earring")
     private String state;
@@ -50,11 +52,11 @@ public class ApplyResponseDTO {
         this.term = term;
     }
 
-    public String getLoanType() {
+    public UUID getLoanType() {
         return loanType;
     }
 
-    public void setLoanType(String loanType) {
+    public void setLoanType(UUID loanType) {
         this.loanType = loanType;
     }
 

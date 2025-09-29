@@ -7,6 +7,7 @@ import com.crediya.apply.model.common.PageQuery;
 import com.crediya.apply.model.common.PageResponse;
 import com.crediya.apply.model.jwt.JwtProvider;
 import com.crediya.apply.usecase.apply.ApplyUseCase;
+import com.crediya.apply.usecase.apply.DecideApplyUseCase;
 import com.crediya.apply.usecase.apply.ListApplyUseCase;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,6 +25,7 @@ class HandlerTest {
 
     private ApplyUseCase applyUseCase;
     private ListApplyUseCase listApplyUseCase;
+    private DecideApplyUseCase decideApplyUseCase;
     private Validator validator;
     private JwtProvider jwtProvider;
     private Handler handler;
@@ -33,10 +35,11 @@ class HandlerTest {
     void setUp() {
         applyUseCase = mock(ApplyUseCase.class);
         listApplyUseCase = mock(ListApplyUseCase.class);
+        decideApplyUseCase = mock(DecideApplyUseCase.class);
         validator = mock(Validator.class);
         jwtProvider = mock(JwtProvider.class);
 
-        handler = new Handler(applyUseCase, listApplyUseCase, validator, jwtProvider);
+        handler = new Handler(applyUseCase, listApplyUseCase, decideApplyUseCase, validator, jwtProvider);
 
         webTestClient = WebTestClient.bindToRouterFunction(
                 RouterFunctions.route()
@@ -109,11 +112,11 @@ class HandlerTest {
         ApplyRequestDTO dto = new ApplyRequestDTO();
         dto.setDni("111");
         when(validator.validate(dto)).thenReturn(Collections.emptySet());
-
+        String email = "lopez@cliente.com";
         Apply domain = new Apply(); domain.setDni("111");
         ApplyResponseDTO responseDTO = new ApplyResponseDTO();
         responseDTO.setDni("111");
-        when(applyUseCase.saveApply(any())).thenReturn(Mono.just(domain));
+        when(applyUseCase.saveApply(any(), email)).thenReturn(Mono.just(domain));
 
         webTestClient.post().uri("/api/v1/apply")
                 .header("Authorization", "Bearer token123")

@@ -32,7 +32,7 @@ public class DecideApplyUseCase {
                                         .build();
 
                                 // Publicas el objeto, no un String
-                                return messagePublisher.publish(event)
+                                return messagePublisher.publishDecide(event)
                                         .thenReturn(Apply.builder()
                                                 .id(saved.getId())
                                                 .state(saved.getState())
