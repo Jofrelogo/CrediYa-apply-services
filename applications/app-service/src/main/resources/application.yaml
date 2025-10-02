@@ -11,6 +11,12 @@ spring:
       path: "/h2"
   profiles:
     include: null
+  cloud:
+    aws:
+      region:
+        static: "us-east-2"
+    main:
+      allow-bean-definition-overriding: true
 management:
   endpoints:
     web:
@@ -51,7 +57,8 @@ adapter:
   sqs:
     region: "us-east-2"
     decideApplyQueueUrl: "https://sqs.us-east-2.amazonaws.com/832780900635/apply-notifications-queue"
-    capacityValidationQueueUrl: "https://sqs:us-east-2:amazonaws:com/832780900635/apply-capacity-validation-queue"
+    capacityValidationQueueUrl: "https://sqs.us-east-2.amazonaws:com/832780900635/apply-capacity-validation-queue"
+    resultQueue: "https://sqs.us-east-2.amazonaws.com/832780900635/apply-result-queue"
     endpoint: "http://localhost:4566"
   restconsumer:
     timeout: 5000
@@ -78,3 +85,4 @@ resilience4j:
         slidingWindowSize: 10
         minimumNumberOfCalls: 10
         waitDurationInOpenState: "10s"
+

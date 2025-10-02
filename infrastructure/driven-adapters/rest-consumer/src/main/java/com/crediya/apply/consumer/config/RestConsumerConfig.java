@@ -32,6 +32,7 @@ public class RestConsumerConfig {
         return WebClient.builder()
                 .baseUrl(url)
                 .defaultHeader(HttpHeaders.CONTENT_TYPE, "application/json")
+                //.defaultHeader(HttpHeaders.AUTHORIZATION, "Bearer " + "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjYXJsb3MzQHVuby5jb20iLCJkbmkiOiIzMzMzMzMiLCJyb2xlIjoiQVNFU09SIiwiaWF0IjoxNzU5MTk1ODQwLCJleHAiOjE3NTkxOTk0NDB9.1f1KK-K-_AIhWJBbUJbBc5mdQNdczH8yJd5eaQcK6Xg")
                 .clientConnector(getClientHttpConnector());
     }
 

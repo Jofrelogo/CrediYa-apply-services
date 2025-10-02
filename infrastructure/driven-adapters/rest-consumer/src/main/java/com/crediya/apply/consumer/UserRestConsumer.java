@@ -19,14 +19,14 @@ public class UserRestConsumer  implements UserRepository {
     @Override
     public Mono<User> getUserByEmail(String token) {
         String emailFromToken = jwtProvider.getEmailFromToken(token);
-        System.out.println("tokenAPlly = " + token);
+
         return webClientBuilder.build()
                 .get()
                 .uri(uriBuilder -> uriBuilder
                         .path("/api/v1/users/by-email")
                         .queryParam("email", emailFromToken)
                         .build())
-                .header(HttpHeaders.AUTHORIZATION, token) // 👈 Header dinámico
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjYXJsb3MzQHVuby5jb20iLCJkbmkiOiIzMzMzMzMiLCJyb2xlIjoiQVNFU09SIiwiaWF0IjoxNzU5MzY2MDU5LCJleHAiOjE3NTkzNjk2NTl9.GVq0x9pt5PbnyGBt7bsnDZDIqf7x318gkbFceXHqLTM") // 👈 Header dinámico
                 .retrieve()
                 .bodyToMono(User.class);
     }

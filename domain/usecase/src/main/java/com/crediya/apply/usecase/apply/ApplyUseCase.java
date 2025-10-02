@@ -2,6 +2,7 @@ package com.crediya.apply.usecase.apply;
 
 import com.crediya.apply.model.apply.Apply;
 
+import com.crediya.apply.model.apply.ApplyResultEvent;
 import com.crediya.apply.model.apply.gateways.ApplyRepository;
 import com.crediya.apply.model.events.DTO.ApplyValidationEvent;
 import com.crediya.apply.model.events.gateways.MessagePublisher;
@@ -10,6 +11,8 @@ import com.crediya.apply.model.loantype.gateways.LoanTypeRepository;
 import com.crediya.apply.model.user.gateways.UserRepository;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
+
+import java.util.UUID;
 
 @RequiredArgsConstructor
 public class ApplyUseCase {
@@ -54,6 +57,30 @@ public class ApplyUseCase {
                 )
                 // Guardamos el estado actualizado de la solicitud
                 .flatMap(applyRepository::save);
+    }
+
+    public Mono<Void> updateStateFromResult(ApplyResultEvent event) {
+        return applyRepository.findById(UUID.fromString(String.valueOf(event.getApplyId())))
+                .flatMap(apply -> {
+                    String resultado = event.getResultado(); // viene como String del JSON
+                    String nuevoEstado;
+
+                    switch (resultado) {
+                        case "APPROVED":
+                            nuevoEstado = "APPROVED";
+                            break;
+                        case "MANUAL_REVIEW":
+                            nuevoEstado = "MANUAL_REVIEW";
+                            break;
+                        default:
+                            nuevoEstado = "REJECTED";
+                            break;
+                    }
+
+                    Apply updated = apply.withState(nuevoEstado);
+                    return applyRepository.save(updated);
+                })
+                .then();
     }
 
 }
