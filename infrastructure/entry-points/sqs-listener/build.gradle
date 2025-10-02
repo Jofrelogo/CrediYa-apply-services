@@ -1,0 +1,13 @@
+dependencies {
+    implementation project(':model')
+    implementation project(':usecase')
+    implementation 'org.springframework.boot:spring-boot-starter'
+    implementation 'software.amazon.awssdk:sqs'
+    implementation 'org.apache.logging.log4j:log4j-api'
+    implementation 'org.springframework:spring-messaging'
+    implementation 'io.awspring.cloud:spring-cloud-aws-starter-sqs:3.0.2'
+    implementation "software.amazon.awssdk:auth:2.20.86"
+    implementation "software.amazon.awssdk:regions:2.20.86"
+    implementation "software.amazon.awssdk:sqs:2.20.160"
+    implementation "software.amazon.awssdk:netty-nio-client:2.20.160"
+}

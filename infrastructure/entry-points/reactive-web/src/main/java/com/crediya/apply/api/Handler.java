@@ -3,9 +3,7 @@ package com.crediya.apply.api;
 import com.crediya.apply.api.dto.ApplyDecisionRequestDTO;
 import com.crediya.apply.api.dto.ApplyDecisionResponseDTO;
 import com.crediya.apply.api.dto.ApplyRequestDTO;
-import com.crediya.apply.api.dto.ApplyResponseDTO;
 import com.crediya.apply.api.mapper.ApplyMapper;
-import com.crediya.apply.model.common.ErrorResponse;
 import com.crediya.apply.model.common.PageQuery;
 import com.crediya.apply.model.jwt.JwtProvider;
 import com.crediya.apply.usecase.apply.ApplyUseCase;
@@ -69,7 +67,7 @@ public class Handler {
                                 }
 
                                 // ✅ Guardar usuario
-                                return applyUseCase.saveApply(ApplyMapper.requestToDomain(dto))
+                                return applyUseCase.saveApply(ApplyMapper.requestToDomain(dto), token)
                                         .doOnNext(user -> log.info("✅ Apply saved: {}", user.getDni()))
                                         .doOnError(err -> log.error("❌ Error saving apply {}", dto.getDni(), err))
                                         .map(ApplyMapper::domainToRespons)
@@ -85,7 +83,7 @@ public class Handler {
         List<String> reviewStatuses = Arrays.asList(
                 "PENDING_REVIEW",
                 "REJECTED",
-                "MANUAL_REVIEW"
+                "PENDING_MANUAL_REVIEW"
         );
         log.info("📄 Received request to list applications for manual review");
         log.info("📄 Listing applies for review page={}, size={}, statuses={}", page, size, reviewStatuses);

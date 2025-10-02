@@ -23,7 +23,7 @@ public class ApplyMapper {
                 apply.getDni(),
                 apply.getAmount(),
                 apply.getTerm(),
-                apply.getLoanType(),
+                apply.getLoanTypeId(),
                 apply.getState()
         );
     }

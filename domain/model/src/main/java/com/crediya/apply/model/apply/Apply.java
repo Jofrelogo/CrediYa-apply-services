@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.With;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -12,13 +13,14 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder(toBuilder = true)
+@With
 public class Apply {
 
     private UUID id;
     private String dni;
     private double amount;
     private int term;
-    private String loanType;
+    private UUID loanTypeId;
     private String state;
     private LocalDateTime createdAt;
 
@@ -29,7 +31,7 @@ public class Apply {
                 " amount='" + amount + '\'' +
                 ", term='" + term + '\'' +
                 ", state='" + state + '\'' +
-                ", loanType='" + loanType + '\'' +
+                ", loanType='" + loanTypeId + '\'' +
                 ", createdAt='" + createdAt + '\'' +
                 '}';
     }

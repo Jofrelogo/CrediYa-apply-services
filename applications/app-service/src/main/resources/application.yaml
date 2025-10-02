@@ -11,6 +11,12 @@ spring:
       path: "/h2"
   profiles:
     include: null
+  cloud:
+    aws:
+      region:
+        static: "us-east-2"
+    main:
+      allow-bean-definition-overriding: true
 management:
   endpoints:
     web:
@@ -20,6 +26,9 @@ management:
     health:
       probes:
         enabled: true
+  health:
+    circuitbreakers:
+      enabled: true
 cors:
   allowed-origins: "http://localhost:4200,http://localhost:8081"
 routes:
@@ -47,6 +56,33 @@ jwt:
 adapter:
   sqs:
     region: "us-east-2"
-    queueUrl: "https://sqs.us-east-2.amazonaws.com/832780900635/apply-notifications-queue"
+    decideApplyQueueUrl: "https://sqs.us-east-2.amazonaws.com/832780900635/apply-notifications-queue"
+    capacityValidationQueueUrl: "https://sqs.us-east-2.amazonaws:com/832780900635/apply-capacity-validation-queue"
+    resultQueue: "https://sqs.us-east-2.amazonaws.com/832780900635/apply-result-queue"
     endpoint: "http://localhost:4566"
+  restconsumer:
+    timeout: 5000
+    url: "http://localhost:8080"
+    auth-token: "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjYXJsb3MzQHVuby5jb20iLCJkbmkiOiIzMzMzMzMiLCJyb2xlIjoiQVNFU09SIiwiaWF0IjoxNzU4OTA4MTYzLCJleHAiOjE3NTg5MTE3NjN9.Fd3q_HFUmZZUFDfLQVHuyltG_cfBsaiIU2znSAO8UYc"
+resilience4j:
+  circuitbreaker:
+    instances:
+      testGet:
+        registerHealthIndicator: true
+        failureRateThreshold: 50
+        slowCallRateThreshold: 50
+        slowCallDurationThreshold: "2s"
+        permittedNumberOfCallsInHalfOpenState: 3
+        slidingWindowSize: 10
+        minimumNumberOfCalls: 10
+        waitDurationInOpenState: "10s"
+      testPost:
+        registerHealthIndicator: true
+        failureRateThreshold: 50
+        slowCallRateThreshold: 50
+        slowCallDurationThreshold: "2s"
+        permittedNumberOfCallsInHalfOpenState: 3
+        slidingWindowSize: 10
+        minimumNumberOfCalls: 10
+        waitDurationInOpenState: "10s"
 

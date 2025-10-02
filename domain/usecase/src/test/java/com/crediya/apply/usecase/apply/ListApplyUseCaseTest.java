@@ -29,6 +29,7 @@ class ApplyUseCaseTest {
     @Test
     void saveApply_shouldReturnSavedApply() {
         // Arrange
+        String email = "lopez@cliente.com";
         Apply apply = new Apply();
         apply.setDni("123");
         apply.setState("PENDING_REVIEW");
@@ -37,7 +38,7 @@ class ApplyUseCaseTest {
         when(applyRepository.save(any(Apply.class))).thenReturn(Mono.just(apply));
 
         // Act
-        Mono<Apply> result = applyUseCase.saveApply(apply);
+        Mono<Apply> result = applyUseCase.saveApply(apply, email);
 
         // Assert
         StepVerifier.create(result)
@@ -50,6 +51,7 @@ class ApplyUseCaseTest {
     @Test
     void saveApply_shouldPropagateError() {
         // Arrange
+        String email = "lopez@cliente.com";
         Apply apply = new Apply();
         apply.setDni("123");
         apply.setState("PENDING_REVIEW");
@@ -59,7 +61,7 @@ class ApplyUseCaseTest {
         when(applyRepository.save(any(Apply.class))).thenReturn(Mono.error(exception));
 
         // Act
-        Mono<Apply> result = applyUseCase.saveApply(apply);
+        Mono<Apply> result = applyUseCase.saveApply(apply, email);
 
         // Assert
         StepVerifier.create(result)

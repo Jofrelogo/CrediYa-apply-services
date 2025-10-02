@@ -21,7 +21,7 @@ public class ApplyReactiveRepositoryAdapter extends ReactiveAdapterOperations<
         ApplyEntity,
         String,
         ApplyReactiveRepository
->implements ApplyRepository {
+        >implements ApplyRepository {
 
     private static final Logger log = LoggerFactory.getLogger(ApplyReactiveRepositoryAdapter.class);
 

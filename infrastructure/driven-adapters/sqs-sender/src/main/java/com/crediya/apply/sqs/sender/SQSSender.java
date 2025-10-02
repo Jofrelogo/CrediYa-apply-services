@@ -19,24 +19,48 @@ public class SQSSender implements MessagePublisher {
     private ObjectMapper mapper ;
 
     @Override
-    public Mono<Void> publish(Object event) {
+    public Mono<Void> publishDecide(Object event) {
         return Mono.fromCallable(() -> {
                     mapper = new ObjectMapper();
                     String json = mapper.writeValueAsString(event);
 
-                    log.info("JSON enviado a SQS: {}", json);
+                    log.info("JSON enviado a SQS ({}): {}",QueueType.NOTIFICATION, json);
 
-                    return buildRequest(json);
+                    return buildRequest(json, QueueType.NOTIFICATION);
                 })
                 .flatMap(request -> Mono.fromFuture(client.sendMessage(request)))
                 .doOnNext(response -> log.debug("Message sent with ID: {}", response.messageId()))
                 .then();
     }
 
-    private SendMessageRequest buildRequest(String message) {
+    @Override
+    public Mono<Void> publishValidation(Object event) {
+        return Mono.fromCallable(() -> {
+                    mapper = new ObjectMapper();
+                    String json = mapper.writeValueAsString(event);
+
+                    log.info("JSON enviado a SQS ({}): {}", QueueType.CAPACITY_VALIDATION, json);
+                    return buildRequest(json, QueueType.CAPACITY_VALIDATION);
+                })
+                .flatMap(request -> Mono.fromFuture(client.sendMessage(request)))
+                .doOnNext(response -> log.debug("Message sent with ID: {}", response.messageId()))
+                .then();
+    }
+
+    private SendMessageRequest buildRequest(String message, QueueType type) {
+        String queueUrl = switch (type) {
+            case NOTIFICATION -> properties.decideApplyQueueUrl();
+            case CAPACITY_VALIDATION -> properties.capacityValidationQueueUrl();
+        };
+        System.out.println("queueUrl = " + queueUrl );
         return SendMessageRequest.builder()
-                .queueUrl(properties.queueUrl())
+                .queueUrl(queueUrl)
                 .messageBody(message)
                 .build();
+    }
+
+    public enum QueueType {
+        NOTIFICATION,
+        CAPACITY_VALIDATION
     }
 }
